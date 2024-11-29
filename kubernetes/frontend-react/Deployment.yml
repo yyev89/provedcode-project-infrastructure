@@ -1,0 +1,43 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-react
+  labels:
+    app: frontend-react
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend-react
+  revisionHistoryLimit: 3
+  progressDeadlineSeconds: 300
+  minReadySeconds: 10
+  template:
+    metadata:
+      labels:
+        app: frontend-react
+    spec:
+      containers:
+        - name: frontend-react
+          image: yyarynich/provedcode-frontend-react:1.0
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /ping
+              port: 8080
+          resources:
+            limits:
+              memory: 500Mi
+            requests:
+              memory: 500Mi
+              cpu: 500m
+          securityContext:
+            allowPrivilegeEscalation: false
+            privileged: false
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault

@@ -1,0 +1,63 @@
+services:
+  frontend-react:
+    image: yyarynich/provedcode-frontend-react
+    # build:
+    #   context: ../provedcode-project-frontend
+    #   dockerfile: Dockerfile
+    networks:
+      - frontend
+    ports:
+      - 80:8080
+    restart: unless-stopped
+    depends_on:
+      - backend-java
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/ping"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+  backend-java:
+    image: yyarynich/provedcode-backend-java
+    # build:
+      # context: ../provedcode-project-backend
+      # dockerfile: Dockerfile
+    networks:
+      - frontend
+      - backend
+    expose:
+      - 9000
+    restart: unless-stopped
+    environment:
+      - DB_LOGIN=${APP_USER}
+      - DB_PASSWORD=${APP_PASSWORD}
+      - DB_URL=db:5432/${APP_DB}
+      - SPRING_PROFILES_ACTIVE=${APP_MODE}
+    depends_on:
+      - db
+
+  db:
+    image: postgres:15-alpine
+    networks:
+      - backend
+    expose:
+      - 5432
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=${APP_USER}
+      - POSTGRES_PASSWORD=${APP_PASSWORD}
+      - POSTGRES_DB=${APP_DB}
+    healthcheck:
+      test: ["CMD", "pg_isready -d ${APP_DB} -U {APP_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  pgdata:
+
+networks:
+  frontend:
+  backend:
