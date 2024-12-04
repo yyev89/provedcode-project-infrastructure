@@ -1,6 +1,6 @@
 services:
   frontend-react:
-    image: yyarynich/provedcode-frontend-react:1.0
+    image: ghcr.io/yyev89/provedcode-project-frontend
     # build:
     #   context: ../provedcode-project-frontend
     #   dockerfile: Dockerfile
@@ -19,7 +19,7 @@ services:
       start_period: 10s
 
   backend-java:
-    image: yyarynich/provedcode-backend-java:1.0
+    image: ghcr.io/yyev89/provedcode-project-backend
     # build:
       # context: ../provedcode-project-backend
       # dockerfile: Dockerfile
