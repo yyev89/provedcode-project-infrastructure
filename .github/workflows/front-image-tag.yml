@@ -1,0 +1,25 @@
+name: Update frontend image tag
+on:
+  repository_dispatch:
+    types: [frontend_image_tag]
+
+jobs:
+  update-tags:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Update Kubernetes manifests
+        env:
+          REPO: ${{ github.event.client_payload.repo }}
+          IMAGE_TAG: ${{ github.event.client_payload.image_tag }}
+        run: |
+          yq -Yi '.spec.template.spec.containers[0].image = "ghcr.io/'$REPO':'$IMAGE_TAG'"' \ 
+          kubernetes/frontend-react/Deployment.yml
+
+      - name: Create pull request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          base: main
+          token: ${{ secrets.INFRA_PAT }}
+          title: "Update image tag to (${{ github.event.client_payload.image_tag }})"
