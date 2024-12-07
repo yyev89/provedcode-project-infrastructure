@@ -13,8 +13,8 @@ jobs:
         env:
           REPO: ${{ github.event.client_payload.repo }}
           IMAGE_TAG: ${{ github.event.client_payload.image_tag }}
-        run: |
-          yq e '.spec.template.spec.containers[0].image = "ghcr.io/'$REPO':'$IMAGE_TAG'"' \ 
+        run: >
+          yq e '.spec.template.spec.containers[0].image = "ghcr.io/'$REPO':'$IMAGE_TAG'"'
           kubernetes/backend-java/Deployment.yml -i
 
       - name: Create pull request
