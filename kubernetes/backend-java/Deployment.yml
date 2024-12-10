@@ -3,6 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: backend-java
+  namespace: provedcode
   labels:
     app: backend-java
 spec:
