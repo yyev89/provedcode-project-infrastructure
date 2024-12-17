@@ -12,5 +12,6 @@ spec:
       services:
         - kind: Service
           name: frontend-react
+          namespace: provedcode
           port: 8080
           scheme: http
