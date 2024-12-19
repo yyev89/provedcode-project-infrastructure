@@ -17,8 +17,3 @@ variable "eks_name" {
   description = "Name of the EKS cluster"
   type        = string
 }
-
-variable "eks_node_group_status" {
-  description = "EKS managed node group status"
-  type        = string
-}

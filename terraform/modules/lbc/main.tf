@@ -38,7 +38,7 @@ resource "aws_eks_pod_identity_association" "aws_lbc" {
 
 resource "terraform_data" "update_kubeconfig" {
   provisioner "local-exec" {
-    command = "echo ${var.eks_node_group_status} && aws eks update-kubeconfig --region ${var.region} --name ${var.eks_name}"
+    command = "aws eks update-kubeconfig --region ${var.region} --name ${var.eks_name}"
   }
 }
 
