@@ -62,7 +62,8 @@ module "lbc" {
   env                   = module.vpc.env
   vpc_id                = module.vpc.vpc_id
   eks_name              = module.eks.eks_name
-  eks_node_group_status = module.nodegroup.eks_node_group_status
+
+  depends_on = [ module.eks, module.nodegroup ]
 }
 
 module "rds" {
@@ -78,4 +79,19 @@ module "rds" {
 module "s3" {
   source = "./modules/s3"
   env    = module.vpc.env
+}
+
+module "application" {
+  source = "./modules/application"
+  env                = module.vpc.env
+  s3_bucket_id = module.s3.s3_bucket_id
+  iam_access_key_id = module.s3.iam_access_key_id
+  iam_access_key_secret = module.s3.iam_access_key_secret
+  s3_bucket_region = module.s3.s3_bucket_region
+  db_instance_username = module.rds.db_instance_username
+  db_instance_password = module.rds.db_instance_password
+  db_instance_db_name = module.rds.db_instance_db_name
+  db_instance_endpoint = module.rds.db_instance_endpoint
+
+  depends_on = [ module.s3, module.rds, module.lbc ]
 }
