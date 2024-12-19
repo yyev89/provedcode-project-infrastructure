@@ -14,8 +14,8 @@ jobs:
           REPO: ${{ github.event.client_payload.repo }}
           IMAGE_TAG: ${{ github.event.client_payload.image_tag }}
         run: >
-          yq e '.spec.template.spec.containers[0].image = "ghcr.io/'$REPO':'$IMAGE_TAG'"'
-          kubernetes/frontend-react/Deployment.yml -i
+          yq e '.spec.template.spec.containers[0].image = "ghcr.io/'$REPO':'$IMAGE_TAG'"' \
+          kubernetes/eks/frontend-react/Deployment.yml -i
 
       - name: Create pull request
         uses: peter-evans/create-pull-request@v6
