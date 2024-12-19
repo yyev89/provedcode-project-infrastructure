@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
         - name: frontend-react
-          image: ghcr.io/yyev89/provedcode-project-frontend:latest
+          image: ghcr.io/yyev89/provedcode-project-frontend:1.0.1
           ports:
             - containerPort: 8080
               protocol: TCP
