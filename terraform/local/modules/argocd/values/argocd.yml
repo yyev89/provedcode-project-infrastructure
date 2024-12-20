@@ -1,0 +1,13 @@
+---
+# disable https internally, secure on Ingress level
+configs:
+  params:
+    server.insecure: true
+
+# for Slack intergation with custom settings
+notifications:
+  enabled: true
+  secret: 
+    create: false
+  cm:
+    create: false

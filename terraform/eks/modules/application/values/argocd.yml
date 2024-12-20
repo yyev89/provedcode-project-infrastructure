@@ -1,0 +1,10 @@
+---
+# disable https internally, secure on Ingress level
+configs:
+  params:
+    server.insecure: true
+
+# cleanup crds after destroy
+crds:
+  install: true
+  keep: false

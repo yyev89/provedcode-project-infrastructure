@@ -1,29 +1,7 @@
-resource "kubernetes_namespace_v1" "argocd" {
-  metadata {
-    name = "argocd"
-  }
-}
-
-resource "helm_release" "argocd" {
-  name = "argocd"
-
-  repository       = "https://argoproj.github.io/argo-helm"
-  chart            = "argo-cd"
-  namespace        = "argocd"
-  create_namespace = false
-  version          = "7.3.11"
-
-  values = [file("./modules/application/values/argocd.yml")]
-
-  depends_on = [ kubernetes_namespace_v1.argocd ]
-}
-
 resource "kubernetes_namespace_v1" "provedcode" {
   metadata {
     name = "provedcode"
   }
-
-  depends_on = [ helm_release.argocd ]
 }
 
 resource "kubernetes_secret_v1" "pg_secrets" {
@@ -54,6 +32,11 @@ resource "kubernetes_manifest" "application_argocd_provedcode" {
     "apiVersion" = "argoproj.io/v1alpha1"
     "kind"       = "Application"
     "metadata" = {
+      "annotations" = {
+        "notifications.argoproj.io/subscribe.on-deployed.slack"       = "alerts"
+        "notifications.argoproj.io/subscribe.on-sync-failed.slack"    = "alerts"
+        "notifications.argoproj.io/subscribe.on-sync-succeeded.slack" = "alerts"
+      }
       "finalizers" = [
         "resources-finalizer.argocd.argoproj.io",
       ]
@@ -69,7 +52,7 @@ resource "kubernetes_manifest" "application_argocd_provedcode" {
         "directory" = {
           "recurse" = true
         }
-        "path"           = "kubernetes/eks"
+        "path"           = "kubernetes/local"
         "repoURL"        = "https://github.com/yyev89/provedcode-project-infrastructure.git"
         "targetRevision" = "HEAD"
       }
