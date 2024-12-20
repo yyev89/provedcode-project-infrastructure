@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
         - name: backend-java
-          image: yyarynich/provedcode-backend-java:1.0
+          image: ghcr.io/yyev89/provedcode-project-backend:1.0.1
           ports:
             - containerPort: 9000
               protocol: TCP
