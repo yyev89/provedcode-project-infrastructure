@@ -1,0 +1,58 @@
+name: Terraform code validation and security scan
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+    
+jobs:
+  validation:
+    name: Terraform code validation
+    runs-on: ubuntu-22.04
+    
+    steps:
+    - uses: actions/checkout@v3
+      
+    - name: Terraform fmt
+      id: fmt
+      working-directory: terraform/eks
+      run: terraform fmt -recursive
+
+    - name: Terraform init
+      id: init
+      working-directory: terraform/eks
+      run: terraform init -no-color
+
+    - name: Terraform validate
+      id: validate
+      working-directory: terraform/eks
+      run: terraform validate -no-color
+
+
+  scan:
+    name: Security scan with checkov
+    permissions:
+      contents: read
+      security-events: write 
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Checkov GitHub Action
+        uses: bridgecrewio/checkov-action@v12
+        with:
+          directory: terraform/eks
+          compact: true
+          quiet: true
+          soft_fail: true
+          output_format: cli,sarif
+          output_file_path: console,results.sarif
+        
+      - name: Upload SARIF file
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: results.sarif
