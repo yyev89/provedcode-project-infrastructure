@@ -8,3 +8,7 @@ configs:
 crds:
   install: true
   keep: false
+
+# disable notifications controller
+notifications:
+  enabled: false
