@@ -102,6 +102,15 @@ module "s3" {
   depends_on = [module.vpc]
 }
 
+module "monitoring" {
+  source          = "./modules/monitoring"
+  datadog_api_key = var.datadog_api_key
+  datadog_app_key = var.datadog_app_key
+  eks_name        = module.eks.eks_name
+
+  depends_on = [module.lbc]
+}
+
 module "application" {
   source                = "./modules/application"
   env                   = module.vpc.env
@@ -114,5 +123,5 @@ module "application" {
   db_instance_db_name   = module.rds.db_instance_db_name
   db_instance_endpoint  = module.rds.db_instance_endpoint
 
-  depends_on = [module.s3, module.rds, module.lbc]
+  depends_on = [module.s3, module.rds, module.monitoring]
 }
