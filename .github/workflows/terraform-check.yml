@@ -1,34 +1,33 @@
-name: Terraform code validation and security scan
+name: Terraform code validation
 on:
-  push:
-    branches:
-      - main
   pull_request:
     branches:
       - main
-  workflow_dispatch:
+    paths:
+      - "terraform/eks/**/*"
     
 jobs:
   validation:
     name: Terraform code validation
     runs-on: ubuntu-22.04
+    defaults:
+      run:
+        shell: bash
+        working-directory: terraform/eks
     
     steps:
     - uses: actions/checkout@v3
       
     - name: Terraform fmt
       id: fmt
-      working-directory: terraform/eks
       run: terraform fmt -recursive
 
     - name: Terraform init
       id: init
-      working-directory: terraform/eks
       run: terraform init -no-color
 
     - name: Terraform validate
       id: validate
-      working-directory: terraform/eks
       run: terraform validate -no-color
 
 
@@ -53,6 +52,6 @@ jobs:
           output_file_path: console,results.sarif
         
       - name: Upload SARIF file
-        uses: github/codeql-action/upload-sarif@v2
+        uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: results.sarif
