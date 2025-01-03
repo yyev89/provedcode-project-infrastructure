@@ -1,5 +1,5 @@
 output "eks_name" {
-  description = "name of the EKS cluster"
+  description = "Name of the EKS cluster"
   value       = aws_eks_cluster.this.name
 }
 
