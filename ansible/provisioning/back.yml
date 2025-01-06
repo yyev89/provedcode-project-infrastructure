@@ -1,0 +1,8 @@
+---
+- hosts: back
+  become: true
+  tasks:
+    - name: Update package repository cache
+      tags: always
+      ansible.builtin.apt:
+        update_cache: true

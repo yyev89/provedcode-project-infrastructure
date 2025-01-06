@@ -1,0 +1,8 @@
+---
+- hosts: db
+  become: true
+  tasks:
+    - name: Update package repository cache
+      tags: always
+      ansible.builtin.dnf:
+        update_cache: true
