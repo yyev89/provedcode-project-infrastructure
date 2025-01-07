@@ -1,0 +1,5 @@
+---
+server_ip: 192.168.100.12
+db_user: app_user
+db_pass: app_pass
+db_name: provedcode
