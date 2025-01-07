@@ -19,6 +19,6 @@ Vagrant.configure("2") do |config|
   end
 
   define_machine(config, "db", "bento/rockylinux-9", "192.168.100.13", "provisioning/db.yml")
-  define_machine(config, "back", "bento/debian-12", "192.168.100.12", "provisioning/back.yml")
+  define_machine(config, "server", "bento/debian-12", "192.168.100.12", "provisioning/server.yml")
   define_machine(config, "web", "bento/ubuntu-24.04", "192.168.100.11", "provisioning/web.yml")
 end

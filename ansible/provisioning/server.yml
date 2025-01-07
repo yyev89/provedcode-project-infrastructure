@@ -1,5 +1,5 @@
 ---
-- hosts: back
+- hosts: server
   become: true
   tasks:
     - name: Update package repository cache
