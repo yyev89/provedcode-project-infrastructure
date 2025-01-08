@@ -8,6 +8,7 @@ server_port: 9000
 db_user: app_user
 db_pass: app_pass
 db_name: provedcode
+app_mode: prod
 bucket: my-bucket
 s3_access_key: test
 s3_secret_key: test
