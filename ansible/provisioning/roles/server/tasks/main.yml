@@ -1,0 +1,47 @@
+- name: Update package repository cache
+  tags: always
+  ansible.builtin.apt:
+    update_cache: true
+
+- name: Install necessary packages
+  ansible.builtin.apt:
+    name:
+      - git
+      - openjdk-17-jre
+      - maven
+    state: present
+
+- name: Clone application backend repository
+  ansible.builtin.git:
+    repo: "{{ app_repo }}"
+    dest: "{{ app_path }}"
+    clone: true
+    update: true
+  become: false
+
+- name: Make maven file executable
+  ansible.builtin.file:
+    path: "{{ app_path }}/mvnw"
+    state: file
+    mode: '755'
+
+- name: Build Java application using Maven
+  ansible.builtin.command:
+    cmd: ./mvnw clean package
+    chdir: "{{ app_path }}"
+  become: false
+
+- name: Create application systemd service file
+  ansible.builtin.template:
+    src: templates/app.service.j2
+    dest: /etc/systemd/system/app.service
+
+- name: Force systemd to reread configs
+  ansible.builtin.systemd_service:
+    daemon_reload: true
+
+- name: Make sure application unit is enabled and running
+  ansible.builtin.systemd_service:
+    name: app.service
+    state: started
+    enabled: true

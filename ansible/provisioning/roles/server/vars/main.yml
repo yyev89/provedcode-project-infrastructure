@@ -1,0 +1,14 @@
+---
+app_repo: https://github.com/yyev89/provedcode-project-backend
+app_path: /home/vagrant/backend
+jar_file: demo-0.5.0-SNAPSHOT.jar
+db_ip: 192.168.100.13
+db_port: 5432
+server_port: 9000
+db_user: app_user
+db_pass: app_pass
+db_name: provedcode
+bucket: my-bucket
+s3_access_key: test
+s3_secret_key: test
+s3_region: eu-central-1
