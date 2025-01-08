@@ -48,7 +48,6 @@
     name: listen_addresses
     value: "*"
   become_user: postgres
-  notify: Restart PostgreSQL
 
 - name: Create PostgreSQL database
   ansible.builtin.postgresql_db:
@@ -61,7 +60,7 @@
   ansible.builtin.postgresql_user:
     name: "{{ db_user }}"
     password: "{{ db_pass }}"
-    role_attr_flags: CREATEDB
+    role_attr_flags: LOGIN,CREATEDB
     db: "{{ db_name }}"
   become_user: postgres
 
@@ -71,5 +70,21 @@
     database: "{{ db_name }}"
     roles: "{{ db_user }}"
     privs: ALL
+  become_user: postgres
+
+- name: Set database owner
+  postgresql_owner:
+    db: "{{ db_name }}"
+    obj_type: database
+    obj_name: "{{ db_name }}"
+    new_owner: "{{ db_user }}"
+  become_user: postgres
+    
+- name: Set schema owner
+  postgresql_owner:
+    db: "{{ db_name }}"
+    obj_type: schema
+    obj_name: public
+    new_owner: "{{ db_user }}"
   become_user: postgres
   notify: Restart PostgreSQL
