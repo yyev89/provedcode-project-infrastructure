@@ -1,0 +1,5 @@
+---
+app_repo: https://github.com/yyev89/provedcode-project-frontend.git
+app_path: /home/vagrant/frontend
+server_ip: 192.168.100.12
+server_port: 9000

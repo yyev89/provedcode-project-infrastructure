@@ -1,8 +1,6 @@
 ---
-- hosts: web
+- name: Web frontend react nginx playbook
+  hosts: web
   become: true
-  tasks:
-    - name: Update package repository cache
-      tags: always
-      ansible.builtin.apt:
-        update_cache: true
+  roles:
+    - role: web

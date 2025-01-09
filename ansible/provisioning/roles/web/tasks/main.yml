@@ -1,0 +1,59 @@
+---
+- name: Update package list
+  ansible.builtin.apt:
+    update_cache: yes
+
+- name: Install necessary packages
+  ansible.builtin.apt:
+    name:
+      - git
+      - nodejs
+      - npm
+      - nginx
+    state: present
+
+- name: Make sure nginx service is enabled and running
+  ansible.builtin.service:
+    name: nginx
+    state: started
+    enabled: true
+
+- name: Create custom nginx config file from the template
+  ansible.builtin.template:
+    src: templates/nginx.conf.template
+    dest: /etc/nginx/sites-available/default
+
+- name: Wait for network to be ready
+  ansible.builtin.wait_for:
+    host: github.com
+    port: 443
+    timeout: 30
+    state: started
+
+- name: Clone application frontend repository
+  ansible.builtin.git:
+    repo: "{{ app_repo }}"
+    dest: "{{ app_path }}"
+    clone: true
+    update: true
+  become: false
+
+- name: Install dependencies based on package.json
+  community.general.npm:
+    path: "{{ app_path }}"
+  become: false
+
+- name: Build React application using npm
+  ansible.builtin.command:
+    cmd: npm run build
+    chdir: "{{ app_path }}"
+  environment:
+    REACT_APP_BASE_URL: ""
+  become: false
+
+- name: Copy build into nginx for serving
+  ansible.builtin.copy:
+    src: "{{ app_path }}/build/"
+    dest: /usr/share/nginx/html
+    remote_src: true
+  notify: Restart nginx
