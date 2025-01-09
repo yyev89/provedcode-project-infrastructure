@@ -1,3 +1,4 @@
+---
 - name: Update package repository cache
   tags: always
   ansible.builtin.apt:

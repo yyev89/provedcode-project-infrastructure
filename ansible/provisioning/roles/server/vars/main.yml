@@ -1,5 +1,5 @@
 ---
-app_repo: https://github.com/yyev89/provedcode-project-backend
+app_repo: https://github.com/yyev89/provedcode-project-backend.git
 app_path: /home/vagrant/backend
 jar_file: demo-0.5.0-SNAPSHOT.jar
 db_ip: 192.168.100.13
