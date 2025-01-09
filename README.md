@@ -10,10 +10,11 @@
 
 ### Repository includes:
 
+- `ansible` directory for provisioning application on 3 virtual machines locally with Vagrant and ansible using VMWare provider
 - `kubernetes` directory with two versions of application yaml manifests (both for running locally and on cloud)
 - `terraform` directory with two versions of infrastructure: local and AWS cloud (EKS cluster with RDS, S3 and ELB services)
 - `workflows` directory with Actions workflows: two for changing docker images tag triggered from other repositories (frontend or backend), and validation of the terraform code with security check
 - `docker-compose.yml` file for running application locally with Docker (requires `.env` file, example included)
 
 ### Tools & Technologies used:
-AWS, Terraform, Kubernetes, Helm, Git, Docker, nginx, PostgreSQL, checkov, Datadog, ArgoCD, Qodana, traefik, terraform-docs, tfk8s
+AWS, Terraform, Kubernetes, Helm, Git, Docker, ansible, Vagrant, VMWare, nginx, PostgreSQL, checkov, Datadog, ArgoCD, Qodana, traefik, terraform-docs, tfk8s
